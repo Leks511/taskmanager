@@ -1,37 +1,38 @@
 import {MONTH_NAMES} from "../const";
 import {formatTime} from "../utils";
 
-
-const createHashtagsMarkup = (hashtags) => {
-  return hashtags
-    .map((hashtag) => {
-      return (
-        `<span class="card__hashtag-inner">
-          <span class="card__hashtag-name">
-            #${hashtag}
-          </span>
-        </span>`
-      );
-    })
-    .join(`\n`);
+const createHashtagsMarkup = (tags) => {
+  return tags.map((tag) => {
+    return (
+      `<span class="card__hashtag-inner">
+        <span class="card__hashtag-name">
+          #${tag}
+        </span>
+      </span>`
+    );
+  })
+  .join(`\n`);
 };
 
-export const createTaskTemplate = (task) => {
-
-  const {description, tags, dueDate, color, repeatingDays} = task;
+export const createTaskTemplate = ({
+  description,
+  dueDate,
+  repeatingDays,
+  tags,
+  color}) => {
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? `${dueDate.getDay()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
-  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
+  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
 
   return (
-    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
+    `<article class="card card--${color} ${deadlineClass} ${repeatClass}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
@@ -41,7 +42,10 @@ export const createTaskTemplate = (task) => {
             <button type="button" class="card__btn card__btn--archive">
               archive
             </button>
-            <button type="button" class="card__btn card__btn--favorites card__btn--disabled">
+            <button
+              type="button"
+              class="card__btn card__btn--favorites card__btn--disabled"
+            >
               favorites
             </button>
           </div>
@@ -79,3 +83,11 @@ export const createTaskTemplate = (task) => {
     </article>`
   );
 };
+
+const createTaskTemplates = (count) => {
+  return new Array(count)
+    .fill(``)
+    .map(createTaskTemplate());
+};
+
+export {createTaskTemplates};
