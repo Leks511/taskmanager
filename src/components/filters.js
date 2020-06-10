@@ -1,3 +1,6 @@
+import Util from "../util";
+const util = new Util();
+
 const FILTERS = [`all`, `overdue`, `today`, `favorites`, `repeating`, `tags`, `archive`];
 
 const getFilterCount = (filter, tasks) => {
@@ -13,7 +16,7 @@ const getFilterCount = (filter, tasks) => {
 
   // Временно
   if (filter === `today`) {
-    count = tasks.filter((task) => Math.random() > 0.5).length;
+    count = tasks.filter(() => Math.random() > 0.5).length;
   }
 
   if (filter === `favorites`) {
@@ -52,10 +55,33 @@ const createFilterMarkup = (filter, tasks) => {
   );
 };
 
-export const createFiltersTemplate = (tasks) => {
-  return  (
+const createFiltersTemplate = (tasks) => {
+  return (
     `<section class="main__filter filter container">
       ${FILTERS.map((filter) => createFilterMarkup(filter, tasks)).join(`\n`)}
     </section>`
   );
 };
+
+export default class Filters {
+  constructor(tasks) {
+    this._element = null;
+    this._tasks = tasks;
+  }
+
+  getTemplate() {
+    return createFiltersTemplate(this._tasks);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = util.createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  remove() {
+    this._element = null;
+  }
+}

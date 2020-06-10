@@ -1,5 +1,7 @@
 import {MONTH_NAMES} from "../const";
-import {formatTime} from "../utils";
+
+import Util from "../util";
+const util = new Util();
 
 const createHashtagsMarkup = (tags) => {
   return tags.map((tag) => {
@@ -14,7 +16,7 @@ const createHashtagsMarkup = (tags) => {
   .join(`\n`);
 };
 
-export const createTaskTemplate = ({
+const createTaskTemplate = ({
   description,
   dueDate,
   repeatingDays,
@@ -25,7 +27,7 @@ export const createTaskTemplate = ({
   const isDateShowing = !!dueDate;
 
   const date = isDateShowing ? `${dueDate.getDay()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const time = isDateShowing ? util.formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const deadlineClass = isExpired ? `card--deadline` : ``;
@@ -84,10 +86,25 @@ export const createTaskTemplate = ({
   );
 };
 
-const createTaskTemplates = (count) => {
-  return new Array(count)
-    .fill(``)
-    .map(createTaskTemplate());
-};
+export default class Task {
+  constructor(data) {
+    this._data = data;
+    this._element = null;
+  }
 
-export {createTaskTemplates};
+  getTemplate() {
+    return createTaskTemplate(this._data);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = util.createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  remove() {
+    this._element = null;
+  }
+}
