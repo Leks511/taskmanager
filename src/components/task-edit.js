@@ -64,7 +64,7 @@ const createColorsMarkup = (colors, activeColor) => {
   }).join(`\n`);
 };
 
-export const createTaskEditTemplate = ({
+const createTaskEditTemplate = ({
   description,
   dueDate,
   repeatingDays,
@@ -186,7 +186,7 @@ export default class TaskEdit {
 
   getElement() {
     if (!this._element) {
-      this._element = util.createElement(this._data);
+      this._element = util.createElement(this.getTemplate());
     }
 
     return this._element;

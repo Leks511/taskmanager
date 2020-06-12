@@ -1,10 +1,10 @@
 import Menu from "./components/menu";
 import Filters from "./components/filters";
 import Board from "./components/board";
-// import {createLoadMoreButtonTemplate} from "./components/load-more-button";
+import LoadMoreButton from "./components/load-more-button";
 
-// import {createTaskEditTemplate} from "./components/task-edit";
-// import {createTaskTemplate} from "./components/task";
+import TaskEdit from "./components/task-edit";
+import Task from "./components/task";
 
 import {generateTasks} from "./mocks/task";
 
@@ -12,8 +12,8 @@ import Util from "./util";
 const util = new Util();
 
 const TASKS_COUNT = 50;
-// const SHOWING_TASKS_COUNT_ON_START = 8;
-// const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
+const SHOWING_TASKS_COUNT_ON_START = 8;
+const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
 const tasks = generateTasks(TASKS_COUNT);
 
@@ -25,11 +25,12 @@ util.render(menuContainer, new Menu().getElement(), util.RENDER_POSITION.BEFOREE
 util.render(mainElement, new Filters(tasks).getElement(), `beforeend`);
 util.render(mainElement, new Board().getElement(), `beforeend`);
 
-// const boardElement = mainElement.querySelector(`.board`);
+const boardElement = mainElement.querySelector(`.board`);
 
-// const tasksListElement = boardElement.querySelector(`.board__tasks`);
+const tasksListElement = boardElement.querySelector(`.board__tasks`);
 
-// render(tasksListElement, createTaskEditTemplate(tasks[0]), `beforeend`);
+util.render(tasksListElement, new TaskEdit(tasks[0]).getElement(), `beforeend`);
+
 
 // let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 // tasks.slice(1, showingTasksCount).forEach((task) => render(tasksListElement, createTaskTemplate(task), `beforeend`));
