@@ -24,7 +24,7 @@ export default class LoadMoreButton {
     return this._element;
   }
 
-  remove() {
+  removeElement() {
     this._element = null;
   }
 }

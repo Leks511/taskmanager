@@ -1,29 +1,29 @@
 import Menu from "./components/menu";
-// import {createFiltersTemplate} from "./components/filters";
-// import {createBoardTemplate} from "./components/board";
+import Filters from "./components/filters";
+import Board from "./components/board";
 // import {createLoadMoreButtonTemplate} from "./components/load-more-button";
 
 // import {createTaskEditTemplate} from "./components/task-edit";
 // import {createTaskTemplate} from "./components/task";
 
-// import {generateTasks} from "./mocks/task";
+import {generateTasks} from "./mocks/task";
 
 import Util from "./util";
 const util = new Util();
 
-// const TASKS_COUNT = 50;
+const TASKS_COUNT = 50;
 // const SHOWING_TASKS_COUNT_ON_START = 8;
 // const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-// const tasks = generateTasks(TASKS_COUNT);
+const tasks = generateTasks(TASKS_COUNT);
 
 const mainElement = document.querySelector(`main`);
 
 const menuContainer = mainElement.querySelector(`.control`);
 util.render(menuContainer, new Menu().getElement(), util.RENDER_POSITION.BEFOREEND);
 
-// render(mainElement, createFiltersTemplate(tasks), `beforeend`);
-// render(mainElement, createBoardTemplate(), `beforeend`);
+util.render(mainElement, new Filters(tasks).getElement(), `beforeend`);
+util.render(mainElement, new Board().getElement(), `beforeend`);
 
 // const boardElement = mainElement.querySelector(`.board`);
 

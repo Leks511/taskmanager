@@ -1,5 +1,7 @@
-import {getRandomArrayItem, getRandomDate} from "../utils";
 import {COLORS, DAYS} from "../const";
+
+import Util from "../util";
+const util = new Util();
 
 const DESCRIPTION = [
   `Изучить теорию`,
@@ -28,18 +30,18 @@ const generateTags = (tags) => {
 };
 
 const generateRepeatingDays = () => Object.assign({}, REPEATING_DAYS, {
-  [getRandomArrayItem(DAYS)]: Math.random() > 0.5,
+  [util.getRandomArrayItem(DAYS)]: Math.random() > 0.5,
 });
 
 const generateTask = () => {
-  const dueDate = Math.random() > 0.5 ? getRandomDate() : null;
+  const dueDate = Math.random() > 0.5 ? util.getRandomDate() : null;
 
   return {
-    description: getRandomArrayItem(DESCRIPTION),
+    description: util.getRandomArrayItem(DESCRIPTION),
     dueDate,
     repeatingDays: dueDate ? REPEATING_DAYS : generateRepeatingDays(),
     tags: new Set(generateTags(TAGS)),
-    color: getRandomArrayItem(COLORS),
+    color: util.getRandomArrayItem(COLORS),
     isFavorite: Math.random() > 0.5,
     inArchive: Math.random() > 0.5
   };

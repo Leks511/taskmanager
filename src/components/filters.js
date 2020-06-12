@@ -81,7 +81,7 @@ export default class Filters {
     return this._element;
   }
 
-  remove() {
+  removeElement() {
     this._element = null;
   }
 }
