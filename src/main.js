@@ -16,14 +16,18 @@ const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
 const renderTask = (taskData) => {
-  const taskCard = new Task(taskData);
-  const taskEdit = new TaskEdit(taskData);
+  const taskCard = new Task(taskData).getElement();
+  const taskEdit = new TaskEdit(taskData).getElement();
 
-  taskCard.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, () => console.log(`${taskData.description} was clicked!`));
+  taskCard.querySelector(`.card__btn--edit`).addEventListener(`click`, () => {
+    tasksListElement.replaceChild(taskEdit, taskCard);
+  });
 
-  taskEdit.getElement().querySelector(`form`).addEventListener(`submit`, () => console.log(`${taskData.description} was submited!`))
+  taskEdit.querySelector(`form`).addEventListener(`submit`, () => {
+    tasksListElement.replaceChild(taskCard, taskEdit);
+  });
 
-  util.render(tasksListElement, taskCard.getElement(), util.RENDER_POSITION.BEFOREEND);
+  util.render(tasksListElement, taskCard, util.RENDER_POSITION.BEFOREEND);
 };
 
 const tasks = generateTasks(TASKS_COUNT);
