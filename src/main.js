@@ -31,21 +31,21 @@ const tasksListElement = boardElement.querySelector(`.board__tasks`);
 
 util.render(tasksListElement, new TaskEdit(tasks[0]).getElement(), util.RENDER_POSITION.BEFOREEND);
 
-
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-tasks.slice(1, showingTasksCount).forEach((task) => util.render(tasksListElement, new Task(task), util.RENDER_POSITION.BEFOREEND));
+tasks.slice(1, showingTasksCount).forEach((task) => util.render(tasksListElement, new Task(task).getElement(), util.RENDER_POSITION.BEFOREEND));
 
-util.render(boardElement, new LoadMoreButton().getElement(), util.RENDER_POSITION.BEFOREEND);
+const loadMoreButton = new LoadMoreButton();
+util.render(boardElement, loadMoreButton.getElement(), util.RENDER_POSITION.BEFOREEND);
 
-// const loadMoreButtonElement = boardElement.querySelector(`.load-more`);
-// loadMoreButtonElement.addEventListener(`click`, () => {
-//   const prevTasksCount = showingTasksCount;
-//   showingTasksCount = prevTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+loadMoreButton.getElement().addEventListener(`click`, () => {
+  const prevTasksCount = showingTasksCount;
+  showingTasksCount = prevTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
-//   tasks.slice(prevTasksCount, showingTasksCount)
-//     .forEach((task) => render(tasksListElement, createTaskTemplate(task), `beforeend`));
+  tasks.slice(prevTasksCount, showingTasksCount)
+    .forEach((task) => util.render(tasksListElement, new Task(task).getElement(), util.RENDER_POSITION.BEFOREEND));
 
-//   if (showingTasksCount >= tasks.length) {
-//     loadMoreButtonElement.remove();
-//   }
-// });
+  if (showingTasksCount >= tasks.length) {
+    loadMoreButton.getElement().remove();
+    loadMoreButton.removeElement();
+  }
+});
