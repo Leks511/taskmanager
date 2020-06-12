@@ -29,13 +29,13 @@ const boardElement = mainElement.querySelector(`.board`);
 
 const tasksListElement = boardElement.querySelector(`.board__tasks`);
 
-util.render(tasksListElement, new TaskEdit(tasks[0]).getElement(), `beforeend`);
+util.render(tasksListElement, new TaskEdit(tasks[0]).getElement(), util.RENDER_POSITION.BEFOREEND);
 
 
-// let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-// tasks.slice(1, showingTasksCount).forEach((task) => render(tasksListElement, createTaskTemplate(task), `beforeend`));
+let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+tasks.slice(1, showingTasksCount).forEach((task) => util.render(tasksListElement, new Task(task), util.RENDER_POSITION.BEFOREEND));
 
-// render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
+util.render(boardElement, new LoadMoreButton().getElement(), util.RENDER_POSITION.BEFOREEND);
 
 // const loadMoreButtonElement = boardElement.querySelector(`.load-more`);
 // loadMoreButtonElement.addEventListener(`click`, () => {
