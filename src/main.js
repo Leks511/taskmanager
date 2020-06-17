@@ -19,13 +19,26 @@ const renderTask = (taskData) => {
   const taskCard = new Task(taskData).getElement();
   const taskEdit = new TaskEdit(taskData).getElement();
 
-  taskCard.querySelector(`.card__btn--edit`).addEventListener(`click`, () => {
-    tasksListElement.replaceChild(taskEdit, taskCard);
-  });
+  const onEscKeydown = (evt) => {
+    evt.preventDefault();
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      replaceEditToTask();
+      document.removeEventListener(`keydown`, onEscKeydown);
+    }
+  };
 
-  taskEdit.querySelector(`form`).addEventListener(`submit`, () => {
+  const replaceTaskToEdit = () => {
+    tasksListElement.replaceChild(taskEdit, taskCard);
+
+    document.addEventListener(`keydown`, onEscKeydown);
+  };
+
+  const replaceEditToTask = () => {
     tasksListElement.replaceChild(taskCard, taskEdit);
-  });
+  };
+
+  taskCard.querySelector(`.card__btn--edit`).addEventListener(`click`, replaceTaskToEdit);
+  taskEdit.querySelector(`form`).addEventListener(`submit`, replaceEditToTask);
 
   util.render(tasksListElement, taskCard, util.RENDER_POSITION.BEFOREEND);
 };
