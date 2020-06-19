@@ -1,21 +1,19 @@
 import Util from "../util";
 const util = new Util();
 
-const createNoTasksTemplate = () => {
+const createTasksListTemplate = () => {
   return (
-    `<p class="board__no-tasks">
-      Click «ADD NEW TASK» in menu to create your first task
-    </p>`
+    `<div class="board__tasks"></div>`
   );
 };
 
-export default class NoTasks {
+export default class TasksListComponent {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createNoTasksTemplate();
+    return createTasksListTemplate();
   }
 
   getElement() {
@@ -24,5 +22,9 @@ export default class NoTasks {
     }
 
     return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
   }
 }

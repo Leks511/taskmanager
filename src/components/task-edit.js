@@ -174,7 +174,7 @@ const createTaskEditTemplate = ({
   );
 };
 
-export default class TaskEdit {
+export default class TaskEditComponent {
   constructor(data) {
     this._data = data;
     this._element = null;

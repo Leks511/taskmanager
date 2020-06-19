@@ -1,21 +1,23 @@
 import Util from "../util";
 const util = new Util();
 
-const createNoTasksTemplate = () => {
+const createSortTemplate = () => {
   return (
-    `<p class="board__no-tasks">
-      Click «ADD NEW TASK» in menu to create your first task
-    </p>`
+    `<div class="board__filter-list">
+      <a href="#" class="board__filter">SORT BY DEFAULT</a>
+      <a href="#" class="board__filter">SORT BY DATE up</a>
+      <a href="#" class="board__filter">SORT BY DATE down</a>
+    </div>`
   );
 };
 
-export default class NoTasksComponent {
+export default class SortComponent {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createNoTasksTemplate();
+    return createSortTemplate();
   }
 
   getElement() {

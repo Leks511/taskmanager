@@ -63,7 +63,7 @@ const createFiltersTemplate = (tasks) => {
   );
 };
 
-export default class Filters {
+export default class FiltersComponent {
   constructor(tasks) {
     this._element = null;
     this._tasks = tasks;

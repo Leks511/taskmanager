@@ -33,7 +33,7 @@ const createMenuTemplate = () => {
     </section>`);
 };
 
-export default class Menu {
+export default class MenuComponent {
   constructor() {
     this._element = null;
   }
