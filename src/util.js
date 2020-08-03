@@ -1,74 +1,70 @@
-export default class Util {
-  constructor() {
-    this.RANGE = {
-      DAYS: 7,
-      HOURS: 24,
-      MINUTES: 60
-    };
+const RANGE = {
+  DAYS: 7,
+  HOURS: 24,
+  MINUTES: 60
+};
 
-    this.RENDER_POSITION = {
-      BEFOREEND: `beforeend`
-    };
+const RENDER_POSITION = {
+  BEFOREEND: `beforeend`
+};
 
-    this.targetDate = new Date();
-  }
+const targetDate = new Date();
 
-  castTimeFormat(value) {
-    return value < 10 ? `0${value}` : String(value);
-  }
+const castTimeFormat = (value) => {
+  return value < 10 ? `0${value}` : String(value);
+}
 
-  formatTime(date) {
-    const hours = this.castTimeFormat(date.getHours() % 12);
-    const minutes = this.castTimeFormat(date.getMinutes());
-    const interval = date.getHours() > 11 ? `pm` : `am`;
+const  formatTime = (date) => {
+  const hours = this.castTimeFormat(date.getHours() % 12);
+  const minutes = this.castTimeFormat(date.getMinutes());
+  const interval = date.getHours() > 11 ? `pm` : `am`;
 
-    return `${hours}:${minutes} ${interval}`;
-  }
+  return `${hours}:${minutes} ${interval}`;
+}
 
-  getRandomArrayItem(array) {
-    const randomIndex = this.getRandomIntegerNumber(0, array.length);
+const getRandomArrayItem = (array) => {
+  const randomIndex = this.getRandomIntegerNumber(0, array.length);
 
-    return array[randomIndex];
-  }
+  return array[randomIndex];
+}
 
-  getRandomIntegerNumber(min, max) {
-    return min + Math.floor(max * Math.random());
-  }
+const getRandomIntegerNumber = (min, max) => {
+  return min + Math.floor(max * Math.random());
+}
 
-  getDiffTimeValue(range) {
-    const sign = Math.random() > 0.5 ? 1 : -1;
-    return sign * this.getRandomIntegerNumber(0, range);
-  }
+const getDiffTimeValue = (range) => {
+  const sign = Math.random() > 0.5 ? 1 : -1;
+  return sign * getRandomIntegerNumber(0, range);
+}
 
-  getRandomTime(timeRange) {
-    return this.targetDate.getDate() + this.getDiffTimeValue(timeRange);
-  }
+const getRandomTime = (timeRange) => {
+  return targetDate.getDate() + getDiffTimeValue(timeRange);
+}
 
-  getRandomDate() {
-    const days = this.getRandomTime(this.RANGE.DAYS);
-    const hours = this.getRandomTime(this.RANGE.HOURS);
-    const minutes = this.getRandomTime(this.RANGE.MINUTES);
+const getRandomDate = () => {
+  const days = this.getRandomTime(RANGE.DAYS);
+  const hours = this.getRandomTime(RANGE.HOURS);
+  const minutes = this.getRandomTime(RANGE.MINUTES);
 
-    this.targetDate.setDate(days);
-    this.targetDate.setHours(hours);
-    this.targetDate.setMinutes(minutes);
+  targetDate.setDate(days);
+  targetDate.setHours(hours);
+  targetDate.setMinutes(minutes);
 
-    return this.targetDate;
-  }
+  return targetDate;
+}
 
-  createElement(markup) {
-    const div = document.createElement(`div`);
-    div.innerHTML = markup;
+const createElement = (markup) => {
+  const div = document.createElement(`div`);
+  div.innerHTML = markup;
 
-    const element = div.firstChild;
-    return element;
-  }
+  const element = div.firstChild;
+  return element;
+}
 
-  render(container, element, place) {
-    switch (place) {
-      case this.RENDER_POSITION.BEFOREEND:
-        container.append(element);
-        break;
-    }
+const render = (container, element, place) => {
+  switch (place) {
+    case RENDER_POSITION.BEFOREEND:
+      container.append(element);
+      break;
   }
 }

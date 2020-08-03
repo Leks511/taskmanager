@@ -1,5 +1,4 @@
-import Util from "../util";
-const util = new Util();
+import AbstractView from "./abstract.js";
 
 const createMenuTemplate = () => {
   return (
@@ -33,24 +32,8 @@ const createMenuTemplate = () => {
     </section>`);
 };
 
-export default class MenuComponent {
-  constructor() {
-    this._element = null;
-  }
-
+export default class MenuComponent extends AbstractView {
   getTemplate() {
     return createMenuTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = util.createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
