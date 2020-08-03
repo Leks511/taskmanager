@@ -1,4 +1,5 @@
-import AbstractView from "./abstract.js";
+import AbstractComponent from "./abstract-component.js";
+
 
 const createNoTasksTemplate = () => {
   return (
@@ -8,7 +9,8 @@ const createNoTasksTemplate = () => {
   );
 };
 
-export default class NoTasksComponent extends AbstractView {
+
+export default class NoTasks extends AbstractComponent {
   getTemplate() {
     return createNoTasksTemplate();
   }

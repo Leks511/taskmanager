@@ -1,4 +1,5 @@
-import AbstractView from "./abstract.js";
+import AbstractComponent from "./abstract-component.js";
+
 
 const createBoardTemplate = () => {
   return (
@@ -6,7 +7,8 @@ const createBoardTemplate = () => {
   );
 };
 
-export default class BoardComponent extends AbstractView {
+
+export default class Board extends AbstractComponent {
   getTemplate() {
     return createBoardTemplate();
   }

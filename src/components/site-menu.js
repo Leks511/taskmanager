@@ -1,6 +1,6 @@
-import AbstractView from "./abstract.js";
+import AbstractComponent from "./abstract-component.js";
 
-const createMenuTemplate = () => {
+const createSiteMenuTemplate = () => {
   return (
     `<section class="control__btn-wrap">
       <input
@@ -29,11 +29,12 @@ const createMenuTemplate = () => {
       <label for="control__statistic" class="control__label"
         >STATISTICS</label
       >
-    </section>`);
+    </section>`
+  );
 };
 
-export default class MenuComponent extends AbstractView {
+export default class SiteMenu extends AbstractComponent {
   getTemplate() {
-    return createMenuTemplate();
+    return createSiteMenuTemplate();
   }
 }
