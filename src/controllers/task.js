@@ -13,37 +13,37 @@ export default class TaskController {
   }
 
   render(task) {
-    const replaceTaskToEdit = () => {
-      replace(taskEditComponent, taskComponent);
-    };
-  
-    const replaceEditToTask = () => {
-      replace(taskComponent, taskEditComponent);
-    };
-  
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-  
-      if (isEscKey) {
-        replaceEditToTask();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-  
-    const taskComponent = new TaskComponent(task);
-    const taskEditComponent = new TaskEditComponent(task);
-  
-    taskComponent.setEditButtonClickHandler(() => {
-      replaceTaskToEdit();
-      document.addEventListener(`keydown`, onEscKeyDown);
+    this._taskComponent = new TaskComponent(task);
+    this._taskEditComponent = new TaskEditComponent(task);
+
+    this._taskComponent.setEditButtonClickHandler(() => {
+      this._replaceTaskToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
     });
   
-    taskEditComponent.setSubmitHandler((evt) => {
+    this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      replaceEditToTask();
-      document.removeEventListener(`keydown`, onEscKeyDown);
+      this._replaceEditToTask();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
   
-    render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
+    render(this._taskListElement, this._taskComponent, RenderPosition.BEFOREEND);
+  }
+
+  _replaceTaskToEdit() {
+    replace(this._taskEditComponent, this._taskComponent);
+  }
+  
+  _replaceEditToTask() {
+    replace(this._taskComponent, this._taskEditComponent);
+  }
+
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      this._replaceEditToTask();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
   }
 }
