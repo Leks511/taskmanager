@@ -21,13 +21,16 @@ export default class TaskController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
   
+    this._taskComponent.setFavoritesButtonClickHandler(() => {});
+
+    this._taskComponent.setArchiveButtonClickHandler(() => {});
+
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       this._replaceEditToTask();
     });
-  
-    // this._container
-    render(this._taskListElement, this._taskComponent, RenderPosition.BEFOREEND);
+
+    render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
   }
 
   _replaceTaskToEdit() {
