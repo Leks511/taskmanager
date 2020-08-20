@@ -8,10 +8,9 @@ import {render, remove, RenderPosition} from "../utils/render.js";
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-const renderTasks = (taskListElement, tasks) => {
+const renderTasks = (taskListElement, tasks, onDataChange) => {
   tasks.map((task) =>  {
-    const taskController = new TaskController(taskListElement);
-
+    const taskController = new TaskController(taskListElement, onDataChange);
     taskController.render(task);
 
     return taskController;
@@ -49,6 +48,7 @@ export default class BoardController {
     this._sortComponent = new SortComponent();
     this._noTasksComponent = new NoTasksComponent();
 
+    this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
@@ -70,7 +70,7 @@ export default class BoardController {
 
     const taskListElement = this._tasksComponent.getElement();
 
-    const newTasks = renderTasks(taskListElement, this._tasks.slice(0, this._showingTasksCount));
+    const newTasks = renderTasks(taskListElement, this._tasks.slice(0, this._showingTasksCount), this._onDataChange);
     
     this._renderLoadMoreButton();
   }
@@ -89,7 +89,7 @@ export default class BoardController {
       this._showingTasksCount = this._showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
       const sortedTasks = getSortedTasks(this._tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-      const newTasks = renderTasks(taskListElement, sortedTasks);
+      const newTasks = renderTasks(taskListElement, sortedTasks, this._onDataChange);
 
       this._showedTaskControllers = this._showingTasksControllers.concat(newTasks);
 
@@ -97,6 +97,18 @@ export default class BoardController {
         remove(this._loadMoreButtonComponent);
       }
     });
+  }
+
+  _onDataChange(taskController, oldData, newData) {
+    const index = this._tasks.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
+
+    taskController.render(this._tasks[index])
   }
 
   _onSortTypeChange(sortType) {
@@ -107,7 +119,7 @@ export default class BoardController {
 
     taskListElement.innerHTML = ``;
 
-    const newTasks = renderTasks(taskListElement, sortedTasks);
+    const newTasks = renderTasks(taskListElement, sortedTasks, this._onDataChange);
     this._showedTaskControllers = newTasks;
 
     this._renderLoadMoreButton();
