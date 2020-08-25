@@ -21,7 +21,7 @@ export default class Sort extends AbstractComponent {
   constructor() {
     super();
 
-    this._currentSortType = SortType.DEFAULT;
+    this._currenSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
@@ -29,11 +29,10 @@ export default class Sort extends AbstractComponent {
   }
 
   getSortType() {
-    return this._currentSortType;
+    return this._currenSortType;
   }
 
   setSortTypeChangeHandler(handler) {
-    // Получаем значение data-атрибута кликнутого элемента и отдаём это значение в handler
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -43,13 +42,13 @@ export default class Sort extends AbstractComponent {
 
       const sortType = evt.target.dataset.sortType;
 
-      if (this._currentSortType === sortType) {
+      if (this._currenSortType === sortType) {
         return;
       }
 
-      this._currentSortType = sortType;
+      this._currenSortType = sortType;
 
-      handler(this._currentSortType);
+      handler(this._currenSortType);
     });
   }
 }
