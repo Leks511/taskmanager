@@ -42,15 +42,24 @@ export default class BoardController {
   constructor(container) {
     this._container = container;
 
+    this._tasks = [];
+    this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+
     this._noTasksComponent = new NoTasksComponent();
     this._sortComponent = new SortComponent();
     this._tasksComponent = new TasksComponent();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
+
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
+
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   render(tasks) {
+    this._tasks = tasks;
+
     const container = this._container.getElement();
-    const isAllTasksArchived = tasks.every((task) => task.isArchive);
+    const isAllTasksArchived = this._tasks.every((task) => task.isArchive);
 
     if (isAllTasksArchived) {
       render(container, this._noTasksComponent, RenderPosition.BEFOREEND);
@@ -62,14 +71,13 @@ export default class BoardController {
 
     const taskListElement = this._tasksComponent.getElement();
 
-    let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+    renderTasks(taskListElement, tasks.slice(0, this._showingTasksCount));
 
-    renderTasks(taskListElement, tasks.slice(0, showingTasksCount));
-    renderLoadMoreButton();
+    this._renderLoadMoreButton();
   }
 
   _renderLoadMoreButton() {
-    if (showingTasksCount >= tasks.length) {
+    if (this._showingTasksCount >= this._tasks.length) {
       return;
     }
 
@@ -90,13 +98,14 @@ export default class BoardController {
   }
 
   _setSortTypeChangeHandler(sortType) {
-    showingTasksCount = SHOWING_TASKS_COUNT_BY_BUTTON;
+    this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
-    const sortedTasks = getSortedTasks(tasks, sortType, 0, showingTasksCount);
+    const sortedTasks = getSortedTasks(this._tasks, sortType, 0, this._showingTasksCount);
+    const taskListElement = this._tasksComponent.getElement();
 
     taskListElement.innerHTML = ``;
 
     renderTasks(taskListElement, sortedTasks);
-    renderLoadMoreButton();
+    this._renderLoadMoreButton();
   }
 }
