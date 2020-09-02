@@ -13,9 +13,13 @@ const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
 
 const renderTasks = (taskListElement, tasks) => {
-  tasks.forEach((task) => {
-    renderTask(taskListElement, task);
-  });
+  return tasks.map((task) => {
+    const taskController = new TaskController(taskListElement);
+
+    taskController.render(task);
+
+    return taskController;
+  })
 };
 
 const getSortedTasks = (tasks, sortType, from, to) => {
@@ -43,6 +47,7 @@ export default class BoardController {
     this._container = container;
 
     this._tasks = [];
+    this._showedTasksControllers = [];
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
     this._noTasksComponent = new NoTasksComponent();
@@ -71,7 +76,8 @@ export default class BoardController {
 
     const taskListElement = this._tasksComponent.getElement();
 
-    renderTasks(taskListElement, tasks.slice(0, this._showingTasksCount));
+    const newTasks = renderTasks(taskListElement, tasks.slice(0, this._showingTasksCount));
+    this._showedTasksControllers = this._showedTasksControllers.concat(newTasks)
 
     this._renderLoadMoreButton();
   }
@@ -81,6 +87,7 @@ export default class BoardController {
       return;
     }
 
+    const container = this._container.getElement();
     render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
     this._loadMoreButtonComponent.setClickHandler(() => {
@@ -88,8 +95,9 @@ export default class BoardController {
       showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
 
       const sortedTasks = getSortedTasks(tasks, this._sortComponent.getSortType(), prevTasksCount, showingTasksCount);
+      const newTasks = renderTasks(taskListElement, sortedTasks);
 
-      renderTasks(taskListElement, sortedTasks);
+      this._showedTasksControllers = this._showedTasksControllers.concat(newTasks);
 
       if (showingTasksCount >= tasks.length) {
         remove(this._loadMoreButtonComponent);
@@ -97,7 +105,7 @@ export default class BoardController {
     });
   }
 
-  _setSortTypeChangeHandler(sortType) {
+  _onSortTypeChange(sortType) {
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
     const sortedTasks = getSortedTasks(this._tasks, sortType, 0, this._showingTasksCount);
