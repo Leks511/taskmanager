@@ -29,12 +29,16 @@ export default class TaskController {
     });
   
     this._taskComponent.setArchiveButtonClickHandler((evt) => {
+      evt.preventDefault();
+
       this._onDataChange(this, task, Object.assign({}, task, {
         isArchive: !task.isArchive
       }));
     });
 
-    this._taskComponent.setArchiveButtonClickHandler(() => {
+    this._taskComponent.setFavoriteButtonClickHandler((evt) => {
+      evt.preventDefault();
+
       this._onDataChange(this, task, Object.assign({}, task, {
         isFavorite: !task.isFavorite
       }));

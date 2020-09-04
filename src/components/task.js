@@ -30,7 +30,7 @@ const createTaskTemplate = (task) => {
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   const editButton = createBruttonMarkup(`edit`);
-  const archiveButton = createBruttonMarkup(`archive`, !task.isArhive);
+  const archiveButton = createBruttonMarkup(`archive`, !task.isArchive);
   const favoriteButton = createBruttonMarkup(`favorite`, !task.isFavorite);
 
   return (

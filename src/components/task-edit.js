@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {COLORS, DAYS, MONTH_NAMES} from "../const.js";
 import {formatTime} from "../utils/common.js";
 
@@ -131,17 +131,17 @@ const createTaskEditTemplate = (task) => {
   );
 };
 
-export default class TaskEdit extends AbstractComponent {
+export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
-
+  
     this._task = task;
   }
-
+  
   getTemplate() {
     return createTaskEditTemplate(this._task);
   }
-
+  
   setSubmitHandler(handler) {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, handler);
