@@ -115,7 +115,7 @@ export default class BoardController {
 
     this._tasks = [].concat(this._tasks.slice(0, index), newData, this._tasks.slice(index + 1));
 
-    taskController.render(this._taks[index]);
+    taskController.render(this._tasks[index]);
   }
 
   _onSortTypeChange(sortType) {

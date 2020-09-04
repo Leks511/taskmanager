@@ -28,7 +28,7 @@ export default class TaskController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
   
-    this._taskComponent.setArchiveButtonClickHandler(() => {
+    this._taskComponent.setArchiveButtonClickHandler((evt) => {
       this._onDataChange(this, task, Object.assign({}, task, {
         isArchive: !task.isArchive
       }));
