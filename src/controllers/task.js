@@ -1,6 +1,6 @@
 import TaskComponent from "../components/task.js";
 import TaskEditComponent from "../components/task-edit.js";
-import {render, replace, RenderPosition} from "../utils/render.js";
+import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 const Mode = {
   DEFAULT: `default`,
@@ -47,7 +47,7 @@ export default class TaskController {
 
     this._taskComponent.setFavoriteButtonClickHandler((evt) => {
       evt.preventDefault();
-
+      
       this._onDataChange(this, task, Object.assign({}, task, {
         isFavorite: !task.isFavorite
       }));
@@ -65,6 +65,12 @@ export default class TaskController {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceEditToTask();
     }
+  }
+
+  destroy() {
+    remove(this._taskComponent);
+    remove(this._taskEditComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _replaceEditToTask() {
