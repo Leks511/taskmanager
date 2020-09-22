@@ -1,10 +1,13 @@
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {COLORS, DAYS} from "../const.js";
-import {formatTime, formatDate, isOverdueDate, isRepeating} from "../utils/common.js";
-
+import {formatTime, formatDate} from "../utils/common.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
+
+const isRepeating = (repeatingDays) => {
+  return Object.values(repeatingDays).some(Boolean);
+};
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -53,9 +56,9 @@ const createTaskEditTemplate = (task, options = {}) => {
   const {description, dueDate, color} = task;
   const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
 
-  const isExpired = dueDate instanceof Date && isOverdueDate(dueDate);
-
-  const isBlockSaveButton = (isDateShowing && isRepeatingTask) || (isRepeatingTask && !isRepeating(activeRepeatingDays));
+  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
+    (isRepeatingTask && !isRepeating(activeRepeatingDays));
 
   const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
   const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
@@ -138,7 +141,7 @@ const createTaskEditTemplate = (task, options = {}) => {
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
-  
+
     this._task = task;
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
@@ -149,15 +152,15 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._applyFlatpickr();
     this._subscribeOnEvents();
   }
-  
+
   getTemplate() {
     return createTaskEditTemplate(this._task, {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
-      activeRepeatingDays: this._activeRepeatingDays
+      activeRepeatingDays: this._activeRepeatingDays,
     });
   }
-  
+
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
     this._subscribeOnEvents();
@@ -179,8 +182,17 @@ export default class TaskEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, handler);
+
+    this._submitHandler = handler;
+  }
+
   _applyFlatpickr() {
     if (this._flatpickr) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
@@ -193,13 +205,6 @@ export default class TaskEdit extends AbstractSmartComponent {
         defaultDate: this._task.dueDate || `today`,
       });
     }
-  }
-
-  setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, handler);
-
-    this._submitHandler = handler;
   }
 
   _subscribeOnEvents() {
