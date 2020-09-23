@@ -24,7 +24,7 @@ export default class Tasks {
     const index = this._tasks.findIndex((it) => it.id === id);
 
     if (index === -1) {
-      return; 
+      return false;
     }
 
     // Обновляем
