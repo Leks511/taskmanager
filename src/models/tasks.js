@@ -1,13 +1,24 @@
+import {getTasksByFilter} from "../utils/filter.js";
+import {FilterType} from "../const.js";
+
 export default class Tasks {
   constructor() {
+    // Создаём массив под таски, который заполняется при методе setTasks и сразу зададим фильтр по умолчанию - ALL
     this._tasks = [];
+    this._activeFilterType = FilterType.ALL;
 
     // Что это за обработчики?
     this._dataChangeHandlers = [];
+    this._filterChangeHandlers = [];
   }
 
-  // Метод для возвращения тасков
+  // Метод для возвращения тасков по активному фильтру
   getTasks() {
+    return getTasksByFilter(this._tasks, this._activeFilterType);
+  }
+
+  // Метод для возвращения всех тасков
+  getTasksAll() {
     return this._tasks;
   }
 
@@ -17,6 +28,12 @@ export default class Tasks {
     this._tasks = Array.from(tasks);
     // и тут же вызываем обработчики (?), передав их массив в специальный метод callHandlers
     this._callHandlers(this._dataChangeHandlers);
+  }
+
+  // Метод, устанавливающий в модели активный фильтр и вызывающий обработчики (?)
+  setFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._callHandlers(this._filterChangeHandlers);
   }
 
   updateTask(id, task) {
