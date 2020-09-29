@@ -53,7 +53,12 @@ export default class Tasks {
     return true;
   }
 
-  // Этот метод добавляет обработчик в массив обработчиков
+  // Этот метод добавляет обработчик в массив обработчиков изменения фильтров
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
+  }
+
+  // Этот метод добавляет обработчик в массив обработчиков изменения данных
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
   }

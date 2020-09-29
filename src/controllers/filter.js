@@ -18,6 +18,7 @@ export default class FilterController {
     this._tasksModel.setDataChangeHandler(this._onDataChange);
   }
 
+  // Главный метод рендер
   render() {
     // Находит контейнер, в который будет рендериться вьюха
     const container = this._container;
