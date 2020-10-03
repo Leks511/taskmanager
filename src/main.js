@@ -2,12 +2,9 @@ import BoardComponent from "./components/board.js";
 import BoardController from "./controllers/board.js";
 import FilterController from "./controllers/filter.js";
 import SiteMenuComponent from "./components/site-menu.js";
-
 import TasksModel from "./models/tasks.js";
-
 import {generateTasks} from "./mock/task.js";
 import {render, RenderPosition} from "./utils/render.js";
-
 
 const TASK_COUNT = 22;
 
@@ -15,7 +12,6 @@ const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
 
-// Получаем массив тасков и направляем их в созданный экземпляр модели тасков
 const tasks = generateTasks(TASK_COUNT);
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);

@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 const FILTER_ID_PREFIX = `filter__`;
 
 const getFilterNameById = (id) => {
-  return id.substring(FILTER_ID_PREFIX);
+  return id.substring(FILTER_ID_PREFIX.length);
 };
 
 const createFilterMarkup = (filter, isChecked) => {
@@ -44,9 +44,8 @@ export default class Filter extends AbstractComponent {
 
   setFilterChangeHandler(handler) {
     this.getElement().addEventListener(`change`, (evt) => {
-      // Получаем название фильтра и отправляем его как параметр в обработчик
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
-    })
+    });
   }
 }

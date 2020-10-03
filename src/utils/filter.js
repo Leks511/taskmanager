@@ -1,5 +1,6 @@
+import {isRepeating, isOneDay, isOverdueDate} from "./common.js";
 import {FilterType} from "../const.js";
-import {isOverdueDate, isRepeating, isOneDay} from "./common.js";
+
 
 export const getArchiveTasks = (tasks) => {
   return tasks.filter((task) => task.isArchive);
@@ -35,7 +36,7 @@ export const getTasksInOneDay = (tasks, date) => {
 
 export const getTasksByFilter = (tasks, filterType) => {
   const nowDate = new Date();
-  
+
   switch (filterType) {
     case FilterType.ALL:
       return getNotArchiveTasks(tasks);

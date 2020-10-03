@@ -62,7 +62,6 @@ export default class TaskController {
     }
   }
 
-  // Метод, который будет удалять компонент таска и формы, отписывать прослушку события по Esc
   destroy() {
     remove(this._taskEditComponent);
     remove(this._taskComponent);

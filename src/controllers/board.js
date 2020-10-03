@@ -5,7 +5,6 @@ import TaskController from "./task.js";
 import TasksComponent from "../components/tasks.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
 
-
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
@@ -53,8 +52,8 @@ export default class BoardController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-    this._onFilterChange = this._onFilterChange.bind(this);
     this._onLoadMoreButtonClick = this._onLoadMoreButtonClick.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._tasksModel.setFilterChangeHandler(this._onFilterChange);
@@ -78,26 +77,15 @@ export default class BoardController {
     this._renderLoadMoreButton();
   }
 
-  // Метод, перебирающий каждый таск из показанных на странице
-  // Удаляет вьюху и её подписку на ESC, освобождая память в браузере
-  // И обнуляет список контроллеров в борде. Т.е. удаляет все таски на борде полностью
   _removeTasks() {
     this._showedTaskControllers.forEach((taskController) => taskController.destroy());
     this._showedTaskControllers = [];
-  }
-
-  // Метод, заменяющий список тасков на новый список с определённым кол-вом
-  _updateTasks(count) {
-    this._removeTasks();
-    this._renderTasks(this._tasksModel.getTasks().slice(0, count));
-    this._renderLoadMoreButton();
   }
 
   _renderTasks(tasks) {
     const taskListElement = this._tasksComponent.getElement();
 
     const newTasks = renderTasks(taskListElement, tasks, this._onDataChange, this._onViewChange);
-    
     this._showedTaskControllers = this._showedTaskControllers.concat(newTasks);
     this._showingTasksCount = this._showedTaskControllers.length;
   }
@@ -111,29 +99,18 @@ export default class BoardController {
 
     const container = this._container.getElement();
     render(container, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
-
     this._loadMoreButtonComponent.setClickHandler(this._onLoadMoreButtonClick);
   }
 
-  _onLoadMoreButtonClick() {
-    const prevTasksCount = this._showingTasksCount;
-    const tasks = this._tasksModel.getTasks();
-
-    this._showingTasksCount += SHOWING_TASKS_COUNT_BY_BUTTON;
-
-    const sortedTasks = getSortedTasks(tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
-    this._renderTasks(sortedTasks);
-
-    if (this._showingTasksCount >= this._tasksModel.getTasks().length) {
-      remove(this._loadMoreButtonComponent);
-    }
+  _updateTasks(count) {
+    this._removeTasks();
+    this._renderTasks(this._tasksModel.getTasks().slice(0, count));
+    this._renderLoadMoreButton();
   }
 
   _onDataChange(taskController, oldData, newData) {
-    // Успешно ли обновлён таск
     const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
-    // ЕСЛИ УСПЕШНО, то рендерим
     if (isSuccess) {
       taskController.render(newData);
     }
@@ -141,11 +118,6 @@ export default class BoardController {
 
   _onViewChange() {
     this._showedTaskControllers.forEach((it) => it.setDefaultView());
-  }
-
-  // По изменению фильтра обновим таски на борде
-  _onFilterChange() {
-    this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
   }
 
   _onSortTypeChange(sortType) {
@@ -156,8 +128,24 @@ export default class BoardController {
     this._removeTasks();
     this._renderTasks(sortedTasks);
 
-    this._showedTaskControllers = newTasks;
-
     this._renderLoadMoreButton();
+  }
+
+  _onLoadMoreButtonClick() {
+    const prevTasksCount = this._showingTasksCount;
+    const tasks = this._tasksModel.getTasks();
+
+    this._showingTasksCount = this._showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+
+    const sortedTasks = getSortedTasks(tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
+    this._renderTasks(sortedTasks);
+
+    if (this._showingTasksCount >= sortedTasks.length) {
+      remove(this._loadMoreButtonComponent);
+    }
+  }
+
+  _onFilterChange() {
+    this._updateTasks(SHOWING_TASKS_COUNT_ON_START);
   }
 }
